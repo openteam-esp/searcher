@@ -14,11 +14,14 @@
 ActiveRecord::Schema.define(:version => 20120419035223) do
 
   create_table "pages", :force => true do |t|
+    t.string   "route",      :limit => 2048
     t.text     "title"
     t.text     "url"
-    t.text     "content"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.text     "text"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
+
+  add_index "pages", ["route"], :name => "index_pages_on_route"
 
 end

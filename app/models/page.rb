@@ -1,14 +1,28 @@
 class Page < ActiveRecord::Base
-  attr_accessible :content, :title, :url
+  attr_accessible :route, :url, :title, :text
+
+  attr_accessor :site, :url_for_index
 
   searchable do
     string :site
-    text :url,      :boost => 3
-    text :title,    :boost => 2
-    text :content
+    text :title
+    text :text
+    boost :boost
   end
 
-  def site
-    URI.parse(url).host
+  def reindex
+    self.site = html.site
+    self.url = html.url
+    self.title = html.title
+    self.text = html.text
+    save!
+  end
+
+  def boost
+    @boost ||= 1 - route.count('/') * 0.01
+  end
+
+  def html
+    @html ||= HtmlPage.new(route)
   end
 end
