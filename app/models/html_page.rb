@@ -14,7 +14,7 @@ class HtmlPage
   end
 
   def text
-    @text ||= Sanitize.clean(html)
+    @text ||= Sanitize.clean(html).gsub /[[:space:]]+/, ' '
   end
 
   def title
