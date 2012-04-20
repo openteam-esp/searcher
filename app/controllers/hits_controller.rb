@@ -2,6 +2,6 @@ class HitsController < ApplicationController
   respond_to :json
 
   def index
-    respond_with Page.hits(params[:q], params[:route])
+    respond_with Hit.search(params[:q], params[:route])
   end
 end

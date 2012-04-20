@@ -10,6 +10,10 @@ class Hit
     {title: title, excerpt: excerpt, route: route}.as_json(options)
   end
 
+  def self.search(query, site)
+    Page.find_pages(query, site).hits.map { |hit| Hit.new(hit) }
+  end
+
   protected
     def highlight(hit, field, length)
       highlights = hit.highlights(field)

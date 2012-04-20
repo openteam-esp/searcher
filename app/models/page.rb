@@ -25,10 +25,6 @@ class Page < ActiveRecord::Base
     find_by_route(route).try(&:index) || create(:route => route)
   end
 
-  def self.hits(query, site)
-    find_pages(query, site).hits.map { |hit| Hit.new(hit) }
-  end
-
   def self.find_pages(query, route)
     Page.search {
       keywords query, :highlight => true
