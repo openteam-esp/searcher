@@ -1,0 +1,16 @@
+app:
+  secret:       SECRET
+
+errors:
+  key:          KEY
+  url:          http://errors.openteam.ru
+
+solr:
+  url:          http://localhost:8982/solr
+
+amqp:
+  url:          amqp://localhost
+
+unicorn:
+  workers:      2
+  timeout:      300
