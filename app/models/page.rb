@@ -23,10 +23,11 @@ class Page < ActiveRecord::Base
     find_by_url(url).try(&:index) || create(:url => url)
   end
 
-  def self.find_pages(query, url)
+  def self.search_by(params)
     Page.search {
-      keywords query, :highlight => true
-      with(:url).starting_with(url) if url
+      keywords params[:q], :highlight => true
+      with(:url).starting_with(params[:url])
+      paginate(:page => params[:page].to_i, :per_page => params[:per_page])
     }
   end
 end
