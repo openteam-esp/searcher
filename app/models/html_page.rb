@@ -5,25 +5,17 @@ class HtmlPage
     self.route = route
   end
 
-  def url
-    @url ||= route.gsub /^tgr/, 'http://tomsk.gov.ru'
-  end
-
-  def site
-    @site ||= 'tomsk.gov.ru'
-  end
-
   def text
     @text ||= Sanitize.clean(html).gsub /[[:space:]]+/, ' '
   end
 
   def title
-    @title ||= nokogiri.css('html head title').first.try(:content)
+    @title ||= nokogiri.css('html head title').map(&:content).join ' '
   end
 
   protected
     def real_url
-      @real_url ||= route.gsub /^tgr/, 'http://nocache-tgr.esp.tomsk.gov.ru'
+      @real_url ||= route.gsub(/^tgr/, 'http://nocache-tgr.esp.tomsk.gov.ru')
     end
 
     def html

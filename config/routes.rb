@@ -1,3 +1,3 @@
 Searcher::Application.routes.draw do
-  root :to => 'pages#index'
+  root :to => 'hits#index'
 end

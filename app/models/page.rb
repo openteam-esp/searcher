@@ -1,22 +1,16 @@
 class Page < ActiveRecord::Base
-  attr_accessible :route, :url, :title, :text
+  attr_accessible :route
 
   attr_accessor :site, :url_for_index
 
-  searchable do
-    string :site
-    text :url,    :stored => true, :boost => 2
-    text :title,  :stored => true, :boost => 1.5
-    text :text,   :stored => true
-    boost :boost
-  end
+  delegate :title, :text, :to => :html
 
-  def reindex
-    self.site = html.site
-    self.url = html.url
-    self.title = html.title
-    self.text = html.text
-    save!
+  searchable do
+    string  :route, :stored => true
+    text    :route, :boost => 2 do p route.split('/')[1..-1].join(' ').gsub(/[_-]+/, ' ') end
+    text    :title, :stored => true,  :boost => 1.5
+    text    :text,  :stored => true
+    boost   :boost
   end
 
   def boost
@@ -27,28 +21,18 @@ class Page < ActiveRecord::Base
     @html ||= HtmlPage.new(route)
   end
 
-  def self.highlighted_hits(params)
-    find_pages(params).hits.map { |hit|
-      Page.new do |page|
-        page.title = self.highlight(hit, :title, 255)
-        page.text = self.highlight(hit, :text, 1024)
-        page.url = hit.stored(:url).first
-      end
-    }
+  def self.index_route(route)
+    find_by_route(route).try(&:index) || create(:route => route)
   end
 
-  def self.highlight(hit, field, max_length)
-    if highlight = hit.highlight(field)
-      highlight.format { |word| "<em>#{word}</em>" }
-    else
-      hit.stored(field).first.truncate(max_length, :separator => ' ')
-    end
+  def self.hits(query, site)
+    find_pages(query, site).hits.map { |hit| Hit.new(hit) }
   end
 
-  def self.find_pages(params)
+  def self.find_pages(query, route)
     Page.search {
-      keywords params[:q], :highlight => true
-      with(:site, params[:site]) if params[:site]
+      keywords query, :highlight => true
+      with(:route).starting_with(route) if route
     }
   end
 end
