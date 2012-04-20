@@ -72,6 +72,7 @@ GEM
       configliere
       rails
       unicorn
+    pg (0.13.2)
     polyglot (0.3.3)
     pr_geohash (1.0.0)
     rack (1.4.1)
@@ -151,6 +152,7 @@ DEPENDENCIES
   curb
   esp-commons
   nokogiri
+  pg
   rails
   rspec-rails
   sanitize

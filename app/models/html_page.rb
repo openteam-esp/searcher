@@ -6,7 +6,7 @@ class HtmlPage
   end
 
   def text
-    @text ||= Sanitize.clean(html).to_s.gsub(/[[:space:]]+/, ' ').strip
+    @text ||= body.to_s.gsub(/[[:space:]]+/, ' ').strip
   end
 
   def title
@@ -16,6 +16,10 @@ class HtmlPage
   protected
     def real_url
       @real_url ||= url.gsub(%r{^http://}, 'http://nocache-')
+    end
+
+    def body
+      @body ||= nokogiri.css('.content').map(&:content).map{|content| Sanitize.clean(content)}.join(' ')
     end
 
     def html
