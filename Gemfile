@@ -7,7 +7,6 @@ group :default do
   gem 'nokogiri'
   gem 'rails'
   gem 'sanitize'
-  gem 'sqlite3'
   gem 'sunspot_rails'
 end
 
@@ -15,7 +14,12 @@ group :development do
   gem 'sunspot_solr'
 end
 
+group :production do
+  gem 'pg'
+end
+
 group :test do
   gem 'rspec-rails'
+  gem 'sqlite3'
   gem 'sunspot_matchers'
 end
