@@ -1,10 +1,9 @@
-require 'simple-daemon'
 require 'amqp'
 
-class SubscriberDaemon < SimpleDaemon::Base
-  READ_QUEUE = 'esp.searcher.not_indexed_routes'
+class Subscriber
+  READ_QUEUE = 'esp.searcher.index'
 
-  def self.subscribe_to_read_queue
+  def self.subscribe
     AMQP.start do |connection|
       channel = AMQP::Channel.new(connection)
       queue   = channel.queue(READ_QUEUE, :durable => true)
@@ -17,7 +16,7 @@ class SubscriberDaemon < SimpleDaemon::Base
 
       channel.prefetch(1)
       queue.subscribe(:ack => true) do |header, body|
-        Page.index_route(body)
+        Page.index_url(body)
         header.ack
       end
     end

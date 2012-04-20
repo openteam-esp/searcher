@@ -1,17 +1,17 @@
 class Hit
-  attr_accessor :title, :excerpt, :route
+  attr_accessor :title, :excerpt, :url
   def initialize(sunspot_hit)
     self.title = self.highlight(sunspot_hit, :title, 255)
     self.excerpt = self.highlight(sunspot_hit, :text, 1024)
-    self.route = sunspot_hit.stored(:route)
+    self.url = sunspot_hit.stored(:url)
   end
 
   def as_json(options)
-    {title: title, excerpt: excerpt, route: route}.as_json(options)
+    {title: title, excerpt: excerpt, url: url}.as_json(options)
   end
 
-  def self.search(query, site)
-    Page.find_pages(query, site).hits.map { |hit| Hit.new(hit) }
+  def self.search(query, url)
+    Page.find_pages(query, url).hits.map { |hit| Hit.new(hit) }
   end
 
   protected

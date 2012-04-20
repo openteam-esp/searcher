@@ -1,8 +1,8 @@
 class HtmlPage
-  attr_accessor :route
+  attr_accessor :url
 
-  def initialize(route)
-    self.route = route
+  def initialize(url)
+    self.url = url
   end
 
   def text
@@ -15,11 +15,11 @@ class HtmlPage
 
   protected
     def real_url
-      @real_url ||= route.gsub(/^tgr/, 'http://nocache-tgr.esp.tomsk.gov.ru')
+      @real_url ||= url.gsub(%r{^http://}, 'http://nocache-')
     end
 
     def html
-      @html ||= Requester.new(real_url).response_body
+      @html ||=  Requester.new(real_url).response_body
     end
 
     def nokogiri

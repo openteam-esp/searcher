@@ -7,7 +7,6 @@ group :default do
   gem 'nokogiri'
   gem 'rails'
   gem 'sanitize'
-  gem 'simple-daemon'
   gem 'sqlite3'
   gem 'sunspot_rails'
 end

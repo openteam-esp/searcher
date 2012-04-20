@@ -1,14 +1,9 @@
 class CreatePages < ActiveRecord::Migration
   def change
     create_table :pages do |t|
-      t.string :route, :limit => 2048
-      t.text :title
-      t.text :url
-      t.text :text
-
-      t.timestamps
+      t.string :url, :limit => 4096
     end
 
-    add_index :pages, :route
+    add_index :pages, :url
   end
 end
