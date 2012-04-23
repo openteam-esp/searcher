@@ -19,7 +19,7 @@ class HtmlPage
     end
 
     def body
-      @body ||= nokogiri.css('.content').map(&:content).map{|content| Sanitize.clean(content)}.join(' ')
+      @body ||= nokogiri.css('.index').map(&:content).map{|content| Sanitize.clean(content)}.join(' ')
     end
 
     def html
@@ -27,6 +27,8 @@ class HtmlPage
     end
 
     def nokogiri
-      @nokogiri ||= Nokogiri::HTML(html)
+      @nokogiri ||= Nokogiri::HTML(html).tap do | nokogiri |
+        nokogiri.css('.noindex').map(&:remove)
+      end
     end
 end
