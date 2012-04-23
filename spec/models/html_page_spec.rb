@@ -11,4 +11,5 @@ describe HtmlPage do
   its(:text) { should =~ /Студенты ТУСУРа приняли участие/ }
   its(:text) { should_not =~ /Точка зрения/ }
   its(:text) { should_not =~ /В мире/ }
+  its(:title) { should == 'Главная' }
 end

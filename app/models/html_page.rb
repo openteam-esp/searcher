@@ -10,7 +10,7 @@ class HtmlPage
   end
 
   def title
-    @title ||= nokogiri.css('html head title').map(&:content).join(' ').to_s.strip
+    @title ||= nokogiri.css('html head title').first.try(:content).to_s.split('|').first.squish
   end
 
   protected
