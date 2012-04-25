@@ -2,26 +2,6 @@
 
 require File.expand_path('../../config/environment',  __FILE__)
 
-class SubscriberDaemon
-
-  def initialize
-    SubscriberDaemon.info 'Running subscriber'
-  end
-
-  def run
-    Subscriber.subscribe
-  end
-
-  class << self
-    def logger
-      @logger ||= ActiveSupport::BufferedLogger.new("#{Rails.root}/log/subscriber.log")
-    end
-
-    delegate :debug, :info, :warn, :to => :logger
-  end
-end
-
-
 dir = Rails.root.to_s
 
 daemon_name = (dir.split('/')[-2..-1] << "daemon").join('-')
