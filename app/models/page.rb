@@ -19,8 +19,25 @@ class Page < ActiveRecord::Base
     @html ||= HtmlPage.new(url)
   end
 
+  def self.update_index(action, url)
+    case action
+    when 'searcher.add'
+      index_url(url)
+    when 'searcher.remove'
+      destroy_url(url)
+    end
+  end
+
   def self.index_url(url)
-    find_by_url(url).try(&:index) || create(:url => url)
+    if page = find_by_url(url)
+      page.index
+    else
+      create(:url => url)
+    end
+  end
+
+  def self.destroy_url(url)
+    Page.where("url like '#{url}%'").destroy_all
   end
 
   def self.search_by(params)

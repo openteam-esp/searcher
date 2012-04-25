@@ -6,7 +6,10 @@ class Subscriber
   def self.subscribe
     AMQP.start do |connection|
       channel = AMQP::Channel.new(connection)
-      queue   = channel.queue(READ_QUEUE, :durable => true)
+      exchange = channel.topic('esp')
+      queue = channel.queue('', :durable => true)
+
+      queue.bind(exchange, :routing_key => 'searcher.*')
 
       Signal.trap("INT") do
         connection.close do
@@ -16,7 +19,7 @@ class Subscriber
 
       channel.prefetch(1)
       queue.subscribe(:ack => true) do |header, body|
-        Page.index_url(body)
+        Page.update_index(header.routing_key, body)
         header.ack
       end
     end
