@@ -1,8 +1,6 @@
 require 'amqp'
 
 class Subscriber
-  READ_QUEUE = 'esp.searcher.index'
-
   def self.subscribe
     AMQP.start do |connection|
       channel = AMQP::Channel.new(connection)
