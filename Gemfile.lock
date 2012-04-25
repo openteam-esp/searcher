@@ -68,7 +68,7 @@ GEM
     mime-types (1.18)
     multi_json (1.3.2)
     nokogiri (1.5.2)
-    openteam-commons (0.1.5)
+    openteam-commons (0.1.6)
       airbrake
       configliere
       rails

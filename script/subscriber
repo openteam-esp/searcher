@@ -22,6 +22,6 @@ Daemons.run_proc(daemon_name, daemon_options) do
 
   Dir.chdir dir
 
-  Subscriber.new.run
+  Subscriber.new.start
 end
 

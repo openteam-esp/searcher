@@ -1,12 +1,8 @@
 require 'amqp'
 
 class Subscriber
-  def initialize
-    logger.info "Running subscriber"
-  end
-
-  def run
-    AMQP.start do |connection|
+  def start
+    AMQP.start(Settings['amqp.url']) do |connection|
       channel = AMQP::Channel.new(connection)
       exchange = channel.topic('esp.exchange')
       queue = channel.queue('esp.queue', :durable => true)
@@ -15,7 +11,7 @@ class Subscriber
 
       Signal.trap("TERM") do
         connection.close do
-          logger.info "Stopping subscriber"
+          logger.info "Subscriber stopped"
           EM.stop { exit }
         end
       end
@@ -26,6 +22,7 @@ class Subscriber
         Page.update_index(header.routing_key, body)
         header.ack
       end
+      logger.info "Subscriber started"
     end
   end
 
