@@ -2,27 +2,38 @@ require 'amqp'
 
 class Subscriber
   def start
-    AMQP.start(Settings['amqp.url']) do |connection|
-      channel = AMQP::Channel.new(connection)
-      exchange = channel.topic('esp.exchange')
-      queue = channel.queue('esp.queue', :durable => true)
+    workers.each do |worker|
+      AMQP.start(Settings['amqp.url']) do |connection|
+        channel = AMQP::Channel.new(connection)
+        channel.prefetch(1)
 
-      queue.bind(exchange, :routing_key => 'searcher.*')
+        exchange = channel.topic('esp.exchange')
+        queue = channel.queue(worker.queue, :durable => true)
 
-      Signal.trap("TERM") do
-        connection.close do
-          logger.info "Subscriber stopped"
-          EM.stop { exit }
+        queue.bind(exchange, :routing_key => worker.routing_key)
+
+        Signal.trap("TERM") do
+          connection.close do
+            logger.info "#{worker.class} stopped"
+            EM.stop { exit }
+          end
         end
-      end
 
-      channel.prefetch(1)
-      queue.subscribe(:ack => true) do |header, body|
-        logger.debug("Receive #{header.routing_key}: #{body}")
-        Page.update_index(header.routing_key, body)
-        header.ack
+        queue.subscribe(:ack => true) do |header, body|
+          logger.debug("#{worker.class} receive #{header.routing_key}: #{body}")
+          worker.run(header.routing_key)
+          header.ack
+        end
+
+        logger.info "#{worker.class} started"
       end
-      logger.info "Subscriber started"
+    end
+  end
+
+  def workers
+    Dir.glob("#{Rails.root}/lib/subscribers/*").map do |worker_path|
+      require worker_path
+      File.basename(worker_path, '.rb').classify.constantize.new
     end
   end
 
