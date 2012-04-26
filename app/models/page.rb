@@ -19,15 +19,6 @@ class Page < ActiveRecord::Base
     @html ||= HtmlPage.new(url)
   end
 
-  def self.update_index(action, url)
-    case action
-    when 'searcher.add'
-      index_url(url)
-    when 'searcher.remove'
-      destroy_url(url)
-    end
-  end
-
   def self.index_url(url)
     if page = find_by_url(url)
       page.index

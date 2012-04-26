@@ -7,7 +7,12 @@ class PageIndexer
     'searcher.*'
   end
 
-  def run(routing_key, body)
-    Page.update_index(header.routing_key, body)
+  def run(action, url)
+    case action
+    when 'searcher.add'
+      Page.index_url(url)
+    when 'searcher.remove'
+      Page.destroy_url(url)
+    end
   end
 end
