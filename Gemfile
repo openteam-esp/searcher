@@ -8,11 +8,11 @@ group :default do
   gem 'nokogiri'
   gem 'rails'
   gem 'sanitize'
-  gem 'sunspot_rails'
+  gem 'sunspot_rails',    '>= 2.0.0.pre.120417'
 end
 
 group :development do
-  gem 'sunspot_solr'
+  gem 'sunspot_solr',     '>= 2.0.0.pre.120417'
 end
 
 group :production do
