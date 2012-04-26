@@ -19,18 +19,6 @@ class Page < ActiveRecord::Base
     @html ||= HtmlPage.new(url)
   end
 
-  def self.index_url(url)
-    if page = find_by_url(url)
-      page.index
-    else
-      create(:url => url)
-    end
-  end
-
-  def self.destroy_url(url)
-    Page.where("url like '#{url}%'").destroy_all
-  end
-
   def self.search_by(params)
     Page.search {
       keywords params[:q], :highlight => true
