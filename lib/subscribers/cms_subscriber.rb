@@ -8,6 +8,6 @@ class CmsSubscriber
   end
 
   def remove(url)
-    Page.where(:url => url).destroy_all
+    Page.where("url LIKE '#{url}%'").destroy_all
   end
 end
