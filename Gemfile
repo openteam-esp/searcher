@@ -1,9 +1,6 @@
 source :rubygems
 
 group :default do
-  gem 'amqp'
-  gem 'curb'
-  gem 'daemons'
   gem 'esp-commons'
   gem 'nokogiri'
   gem 'rails'
