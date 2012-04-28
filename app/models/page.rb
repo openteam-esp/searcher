@@ -22,8 +22,8 @@ class Page < ActiveRecord::Base
   def self.search_by(params)
     Page.search {
       keywords params[:q], :highlight => true
-      with(:url).starting_with(params[:url])
-      paginate(:page => params[:page].to_i, :per_page => params[:per_page])
+      with(:url).starting_with(params[:url]) if (params[:url])
+      paginate(:page => (params[:page] || 1).to_i, :per_page => params[:per_page])
     }
   end
 end
