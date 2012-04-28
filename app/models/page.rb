@@ -6,8 +6,12 @@ class Page < ActiveRecord::Base
   searchable do
     string  :url, :stored => true
     text    :url, :boost => 2 do url.gsub(/[^[:alnum:]]+/, ' ') end
-    text    :title, :stored => true,  :boost => 1.5
-    text    :text,  :stored => true
+    {title: 2, text: 1}.each do |field, boost|
+      text    field, :stored => true,  :boost => boost
+      text    "#{field}_ru", :stored => true,  :boost => boost * 0.9 do
+        self.send field
+      end
+    end
     boost   :boost
   end
 

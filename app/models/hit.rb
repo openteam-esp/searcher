@@ -13,14 +13,19 @@ class Hit
 
   protected
     def highlight(hit, field, length)
-      highlights = hit.highlights(field)
-      if highlights.any?
-        highlights.reduce([]) do |result, highlight|
-          result << highlight.format { |word| "<em>#{word}</em>" } if result.length < length
-          result
-        end.join('... ')
-      else
-        hit.stored(field).first.truncate(length, :separator => ' ')
+      highlight = nil;
+      [nil, 'ru'].each do | lang |
+        p hit.highlights 'title_ru'
+        p hit.highlights 'title'
+        highlights = hit.highlights([field, lang].join('_'))
+        if highlights.any?
+          highlight = highlights.reduce([]) do |result, highlight|
+            result << highlight.format { |word| "<em>#{word}</em>" } if result.length < length
+            result
+          end.join('... ')
+          break
+        end
       end
+      highlight || hit.stored(field).first.truncate(length, :separator => ' ')
     end
 end
