@@ -15,8 +15,6 @@ class Hit
     def highlight(hit, field, length)
       highlight = nil;
       [nil, 'ru'].each do | lang |
-        p hit.highlights 'title_ru'
-        p hit.highlights 'title'
         highlights = hit.highlights([field, lang].join('_'))
         if highlights.any?
           highlight = highlights.reduce([]) do |result, highlight|
