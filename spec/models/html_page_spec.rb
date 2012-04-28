@@ -2,9 +2,7 @@
 require 'spec_helper'
 
 describe HtmlPage do
-  subject { HtmlPage.new('http://openteam.ru') }
-
-  before { subject.stub(:html).and_return(open("spec/html/inotomsk.ru.html").read) }
+  subject { HtmlPage.new('http://openteam.ru', open("spec/html/inotomsk.ru.html").read) }
 
   its(:html) { should =~ /<html/}
   its(:text) { should_not =~ /</}

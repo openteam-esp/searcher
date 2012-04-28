@@ -4,10 +4,10 @@ require 'spec_helper'
 
 describe CmsSubscriber do
   subject { CmsSubscriber.new }
+  before  { Requester.stub(:new).and_return {mock(:response_status => 200, :response_body => 'html body')} }
+
   context '#add' do
     before { subject.add 'http://example.com/' }
-
-    specify { Page.find_by_url('http://example.com/').should be_persisted }
 
     specify {
       expect { subject.add 'http://example.com/' }.to_not change(Page, :count)

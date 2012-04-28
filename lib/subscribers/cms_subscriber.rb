@@ -1,9 +1,11 @@
 class CmsSubscriber
+  attr_accessor :logger
+
   def add(url)
     if page = Page.find_by_url(url)
-      page.index
+      page.update_html
     else
-      Page.create(:url => url)
+      Page.new(:url => url).update_html
     end
   end
 

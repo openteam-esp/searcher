@@ -20,7 +20,12 @@ class Page < ActiveRecord::Base
   end
 
   def update_html
-    update_attributes! :html => Requester.new(real_url).response_body
+    requester = Requester.new(real_url)
+    if requester.response_status == 200
+      update_attributes! :html => requester.response_body
+    else
+      throw "Cann't index #{url}. HTTP response code is #{requester.response_status}"
+    end
   end
 
   def self.search_by(params)
