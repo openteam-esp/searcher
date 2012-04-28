@@ -1,8 +1,9 @@
 class HtmlPage
-  attr_accessor :url
+  attr_accessor :url, :html
 
-  def initialize(url)
+  def initialize(url, html)
     self.url = url
+    self.html = html
   end
 
   def text
@@ -14,16 +15,8 @@ class HtmlPage
   end
 
   protected
-    def real_url
-      @real_url ||= url.gsub(%r{^http://}, 'http://nocache-')
-    end
-
     def body
       @body ||= nokogiri.css('.index').map(&:content).map{|content| Sanitize.clean(content)}.join(' ')
-    end
-
-    def html
-      @html ||=  Requester.new(real_url).response_body
     end
 
     def nokogiri
