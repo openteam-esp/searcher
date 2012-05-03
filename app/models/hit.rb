@@ -24,6 +24,6 @@ class Hit
           break
         end
       end
-      highlight || hit.stored(field).first.truncate(length, :separator => ' ')
+      highlight || hit.result.send(field).truncate(length, :separator => ' ')
     end
 end
