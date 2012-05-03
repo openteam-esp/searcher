@@ -61,43 +61,71 @@
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="text" class="solr.TextField" omitNorms="false">
       <analyzer>
-        <tokenizer class='solr.WhitespaceTokenizerFactory'/>
-        <filter class='solr.WordDelimiterFilterFactory'
-          splitOnCaseChange='1'
-          splitOnNumerics='1'
-          generateWordParts='1'
-          generateNumberParts='0'
-          catenateWords='1'
-          catenateNumbers='1'
-          catenateAll='1'
-          preserveOriginal='1'
-          />
-        <filter class='solr.LowerCaseFilterFactory'/>
-        <filter class='solr.PatternReplaceFilterFactory' pattern='ё' replacement='е' replace='all' />
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StandardFilterFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
     </fieldType>
+    <!-- Russian -->
     <fieldType name="ru_text" class="solr.TextField" omitNorms="false">
       <analyzer>
         <tokenizer class='solr.WhitespaceTokenizerFactory'/>
-        <filter class='solr.WordDelimiterFilterFactory'
-          splitOnCaseChange='1'
-          splitOnNumerics='1'
-          generateWordParts='1'
-          generateNumberParts='0'
-          catenateWords='1'
-          catenateNumbers='1'
-          catenateAll='1'
-          preserveOriginal='1'
-          />
+        <filter class='solr.WordDelimiterFilterFactory' splitOnCaseChange='1' splitOnNumerics='1' generateWordParts='1' generateNumberParts='0'
+          catenateWords='1' catenateNumbers='1' catenateAll='1' preserveOriginal='1' />
         <filter class='solr.LowerCaseFilterFactory'/>
         <filter class='solr.PatternReplaceFilterFactory' pattern='ё' replacement='е' replace='all' />
-        <filter class='solr.HunspellStemFilterFactory'
-          dictionary='ru_RU.dic'
-          affix='ru_RU.aff'
-          ignoreCase='true'
-          />
+        <filter class="solr.RussianLightStemFilterFactory"/>
       </analyzer>
     </fieldType>
+    <!-- English -->
+    <fieldType name="en_text" class="solr.TextField" omitNorms="false">
+      <analyzer>
+        <tokenizer class='solr.WhitespaceTokenizerFactory'/>
+        <filter class='solr.WordDelimiterFilterFactory' splitOnCaseChange='1' splitOnNumerics='1' generateWordParts='1' generateNumberParts='0'
+          catenateWords='1' catenateNumbers='1' catenateAll='1' preserveOriginal='1' />
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt" enablePositionIncrements="true" />
+        <filter class="solr.EnglishPossessiveFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+        <filter class="solr.PorterStemFilterFactory"/>
+      </analyzer>
+    </fieldType>
+    <!-- German -->
+    <fieldType name="de_text" class="solr.TextField" omitNorms="false">
+      <analyzer>
+        <tokenizer class='solr.WhitespaceTokenizerFactory'/>
+        <filter class='solr.WordDelimiterFilterFactory' splitOnCaseChange='1' splitOnNumerics='1' generateWordParts='1' generateNumberParts='0'
+          catenateWords='1' catenateNumbers='1' catenateAll='1' preserveOriginal='1' />
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" enablePositionIncrements="true"/>
+        <filter class="solr.GermanLightStemFilterFactory"/>
+      </analyzer>
+    </fieldType>
+    <!-- French -->
+    <fieldType name="fr_text" class="solr.TextField" omitNorms="false">
+      <analyzer>
+        <tokenizer class='solr.WhitespaceTokenizerFactory'/>
+        <filter class='solr.WordDelimiterFilterFactory' splitOnCaseChange='1' splitOnNumerics='1' generateWordParts='1' generateNumberParts='0'
+          catenateWords='1' catenateNumbers='1' catenateAll='1' preserveOriginal='1' />
+        <filter class="solr.ElisionFilterFactory" ignoreCase="true" articles="lang/contractions_fr.txt"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_fr.txt" format="snowball" enablePositionIncrements="true"/>
+        <filter class="solr.FrenchLightStemFilterFactory"/>
+      </analyzer>
+    </fieldType>
+    <!-- Italian -->
+    <fieldType name="it_text" class="solr.TextField" omitNorms="false">
+      <analyzer>
+        <tokenizer class='solr.WhitespaceTokenizerFactory'/>
+        <filter class='solr.WordDelimiterFilterFactory' splitOnCaseChange='1' splitOnNumerics='1' generateWordParts='1' generateNumberParts='0'
+          catenateWords='1' catenateNumbers='1' catenateAll='1' preserveOriginal='1' />
+        <filter class="solr.ElisionFilterFactory" ignoreCase="true" articles="lang/contractions_it.txt"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_it.txt" format="snowball" enablePositionIncrements="true"/>
+        <filter class="solr.ItalianLightStemFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="boolean" class="solr.BoolField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
@@ -160,13 +188,19 @@
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="_local*" stored="false" type="tdouble" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_ru_text" stored="false" type="ru_text" multiValued="true" indexed="true"/>
-    <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_text" stored="false" type="text" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_texts" stored="true" type="text" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*ru_texts" stored="true" type="ru_text" multiValued="true" indexed="true"/>
+    <dynamicField name="*_ru_texts" stored="true" type="ru_text" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_en_texts" stored="true" type="en_text" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_de_texts" stored="true" type="de_text" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_fr_texts" stored="true" type="fr_text" multiValued="true" indexed="true"/>
+    <!-- *** This dynamicField is used by Sunspot! *** -->
+    <dynamicField name="*_it_texts" stored="true" type="it_text" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_b" stored="false" type="boolean" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
