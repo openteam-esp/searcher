@@ -74,6 +74,7 @@
           catenateWords='1' catenateNumbers='1' catenateAll='1' preserveOriginal='1' />
         <filter class='solr.LowerCaseFilterFactory'/>
         <filter class='solr.PatternReplaceFilterFactory' pattern='ё' replacement='е' replace='all' />
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_ru.txt" format="snowball" enablePositionIncrements="true"/>
         <filter class="solr.RussianLightStemFilterFactory"/>
       </analyzer>
     </fieldType>
