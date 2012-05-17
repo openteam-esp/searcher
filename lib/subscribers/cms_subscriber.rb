@@ -2,11 +2,8 @@ class CmsSubscriber
   attr_accessor :logger
 
   def add(url)
-    if page = Page.find_by_url(url)
-      page.update_html
-    else
-      Page.new(:url => url).update_html
-    end
+    page = Page.find_or_create_by_url(url)
+    page.update_html
   end
 
   def remove(url)

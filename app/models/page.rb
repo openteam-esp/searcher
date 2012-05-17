@@ -1,6 +1,8 @@
 class Page < ActiveRecord::Base
   attr_accessible :url, :html
 
+  validates_presence_of :url
+
   delegate :title, :text, :to => :html_page
 
   searchable do
@@ -20,7 +22,10 @@ class Page < ActiveRecord::Base
   end
 
   def html_page
-    @html_page ||= HtmlPage.new(url, html)
+    @html_page ||= begin
+                     update_html unless html?
+                     HtmlPage.new(url, html)
+                   end
   end
 
   def update_html
