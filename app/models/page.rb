@@ -8,10 +8,12 @@ class Page < ActiveRecord::Base
   alias_method :title_ru, :title
   alias_method :text_ru, :text
 
+  alias_attribute :has_html, :html?
+
   searchable do
     string  :url, :stored => true
 
-    boolean :with_html do html? end
+    boolean :has_html
 
     text :title, :stored => true,  :boost => 2
     text :title_ru, :stored => true,  :boost => 1.8
@@ -42,7 +44,7 @@ class Page < ActiveRecord::Base
   def self.search_by(params)
     Page.search {
       keywords params[:q], :highlight => true
-      with(:with_html, true)
+      with(:has_html, true)
       with(:url).starting_with(params[:url]) if (params[:url])
       paginate(:page => (params[:page] || 1).to_i, :per_page => params[:per_page])
     }
