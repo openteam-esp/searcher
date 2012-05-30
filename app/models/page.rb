@@ -25,7 +25,7 @@ class Page < ActiveRecord::Base
   end
 
   def boost
-    @boost ||= 1 - url.count('/') * 0.01
+    @boost ||= [1 - url.count('/') * 0.1, 0.1].max
   end
 
   def html_page
