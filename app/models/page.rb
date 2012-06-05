@@ -52,6 +52,6 @@ class Page < ActiveRecord::Base
 
   private
     def real_url
-      @real_url ||= url.gsub(%r{^http://}, 'http://nocache-')
+      @real_url ||= url.gsub(%r{^http://}, 'http://nocache.')
     end
 end
