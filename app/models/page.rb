@@ -1,7 +1,7 @@
 class Page < ActiveRecord::Base
   attr_accessible :url, :html
 
-  validates_presence_of :url
+  validates :url, :presence => true, :uniqueness => true
 
   delegate :title, :text, :to => :html_page, :allow_nil => true
 
