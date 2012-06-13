@@ -60,6 +60,8 @@ GEM
       openteam-commons
       rails
     eventmachine (0.12.10)
+    fattr (2.2.1)
+    highline (1.6.12)
     hike (1.2.1)
     i18n (0.6.0)
     journey (1.0.3)
@@ -77,9 +79,14 @@ GEM
       configliere
       rails
       unicorn
+    options (2.3.0)
+      fattr
     pg (0.13.2)
     polyglot (0.3.3)
     pr_geohash (1.0.0)
+    progress_bar (0.4.0)
+      highline (~> 1.6.1)
+      options (~> 2.3.0)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -154,6 +161,7 @@ DEPENDENCIES
   esp-commons
   nokogiri
   pg
+  progress_bar
   rails
   rspec-rails
   sanitize

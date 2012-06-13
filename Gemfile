@@ -3,6 +3,7 @@ source :rubygems
 group :default do
   gem 'esp-commons'
   gem 'nokogiri'
+  gem 'progress_bar',                             :require => false
   gem 'rails'
   gem 'sanitize'
   gem 'sunspot_rails',    '>= 2.0.0.pre.120417'
