@@ -14,6 +14,10 @@ class HtmlPage
     @title ||= text_by_css('html head title').split('|').first.to_s.strip
   end
 
+  def entry_date
+    @entry_date ||= nokogiri.css('html head meta[name=entry_date]').first.try(:[], :content).try(:to_datetime)
+  end
+
   protected
     def text_by_css(selector)
       if (nodes = nokogiri.css(selector))

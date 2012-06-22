@@ -2,8 +2,13 @@
 require 'spec_helper'
 
 describe HtmlPage do
-  let(:content) { open("spec/html/inotomsk.ru.html").read }
+  let(:html_path) { "spec/html/inotomsk.ru.html" }
+  let(:content) { open(html_path).read }
   let(:html_page) { HtmlPage.new('http://openteam.ru', content) }
+
+  subject { html_page }
+
+  its(:entry_date) { should be_nil }
 
   describe '#html' do
     subject { html_page.html }
@@ -25,6 +30,11 @@ describe HtmlPage do
   describe '#title' do
     subject { html_page.title }
     it { should == 'Главная' }
+  end
+
+  context 'with entry date' do
+    let(:html_path) { "spec/html/tomsk.gov.ru/news.html" }
+    its(:entry_date) { should == DateTime.parse('22.06.2012 09:53:43 +0700') }
   end
 
 end
