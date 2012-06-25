@@ -27,10 +27,7 @@ class Page < ActiveRecord::Base
   end
 
   def boost
-    @boost ||= begin
-                 boost = [1 - url.count('/') * 0.1, 0.1].max
-                 boost += 45 unless entry_date
-               end
+    @boost ||= 0.9 ** url.count('/')
   end
 
   def html_page
@@ -48,16 +45,15 @@ class Page < ActiveRecord::Base
   end
 
   def self.search_by(params)
-    Page.search {
-      keywords params[:q], :highlight => true
-      with(:has_html, true)
-      with(:url).starting_with(params[:url]) if (params[:url])
-      paginate(:page => (params[:page] || 1).to_i, :per_page => params[:per_page])
-      adjust_solr_params do |params|
-        params[:q] = "{!boost b=recip(ms(NOW,entry_date_dt),3.16e-11,1,1) defType=dismax}#{params[:q]}"
-      end
-    }
+    Page.search do |search|
+      search.keywords params[:q], :highlight => true
+      search.with(:has_html, true)
+      search.with(:url).starting_with(params[:url]) if (params[:url])
+      search.paginate(:page => (params[:page] || 1).to_i, :per_page => params[:per_page])
+      Boostificator.new(:search => search, :field => :entry_date_dt).adjust_solr_params
+    end
   end
+
 
   private
     def real_url

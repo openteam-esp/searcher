@@ -2,6 +2,7 @@ source :rubygems
 
 group :default do
   gem 'esp-commons'
+  gem 'has_searcher'
   gem 'nokogiri'
   gem 'progress_bar',                             :require => false
   gem 'rails'
