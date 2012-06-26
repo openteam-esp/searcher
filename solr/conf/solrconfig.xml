@@ -46,6 +46,8 @@
   <requestHandler name="standard" class="solr.SearchHandler" default="true">
     <lst name="defaults">
       <str name="echoParams">explicit</str>
+      <int name="hl.fragsize">110</int>
+      <int name="hl.snippets">2</int>
     </lst>
   </requestHandler>
   <requestHandler name="/update" class="solr.XmlUpdateRequestHandler"/>
