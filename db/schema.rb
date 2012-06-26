@@ -11,11 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120428023229) do
+ActiveRecord::Schema.define(:version => 20120626090756) do
 
   create_table "pages", :force => true do |t|
-    t.string "url",  :limit => 4096
-    t.text   "html"
+    t.string  "url",   :limit => 4096
+    t.text    "html"
+    t.integer "level"
   end
 
   add_index "pages", ["url"], :name => "index_pages_on_url"
