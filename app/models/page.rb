@@ -10,24 +10,22 @@ class Page < ActiveRecord::Base
 
   alias_attribute :has_html, :html?
 
+  before_save :set_level
+
   searchable do
     string  :url, :stored => true
 
     boolean :has_html
 
-    text :title, :stored => true,  :boost => 2
-    text :title_ru, :stored => true,  :boost => 1.8
+    integer :level
+
+    text :title, :stored => true,  :boost => 1.1
+    text :title_ru, :stored => true,  :boost => 1.05
 
     text :text, :stored => true,  :boost => 1
     text :text_ru, :stored => true,  :boost => 0.9
 
     time :entry_date, :trie => true
-
-    boost :boost
-  end
-
-  def boost
-    @boost ||= 0.9 ** url.count('/')
   end
 
   def html_page
@@ -50,7 +48,7 @@ class Page < ActiveRecord::Base
       search.with(:has_html, true)
       search.with(:url).starting_with(params[:url]) if (params[:url])
       search.paginate(:page => (params[:page] || 1).to_i, :per_page => params[:per_page])
-      Boostificator.new(:search => search, :field => :entry_date_dt).adjust_solr_params
+      Boostificator.new(:search => search, :field => :entry_date_dt, :extra_boost => "pow(0.9,level_i)").adjust_solr_params
     end
   end
 
@@ -58,5 +56,9 @@ class Page < ActiveRecord::Base
   private
     def real_url
       @real_url ||= url.gsub(%r{^http://}, 'http://nocache.')
+    end
+
+    def set_level
+      self.level = [url.count('/'), 3].max - 3 if url_changed? || !level?
     end
 end
