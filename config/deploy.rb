@@ -32,12 +32,17 @@ end
 namespace :subscriber do
   desc "Start rabbitmq subscriber"
   task :start do
-    run "#{deploy_to}/current/script/subscriber -e production start"
+    sudo "/etc/init.d/rmq-subscriber start"
   end
 
   desc "Stop rabbitmq subscriber"
   task :stop do
-    run "#{deploy_to}/current/script/subscriber stop"
+    sudo "/etc/init.d/rmq-subscriber stop"
+  end
+
+  desc "Restart rabbitmq subscriber"
+  task :restart do
+    sudo "/etc/init.d/rmq-subscriber restart"
   end
 end
 
@@ -49,7 +54,7 @@ after "deploy:finalize_update", "deploy:config_app"
 after "deploy", "deploy:migrate"
 after "deploy", "deploy:copy_unicorn_config"
 after "deploy", "deploy:reload_servers"
-after "deploy", "subscriber:start"
+after "deploy", "subscriber:restart"
 after "deploy:restart", "deploy:cleanup"
 after "deploy", "deploy:airbrake"
 
