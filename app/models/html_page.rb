@@ -1,8 +1,7 @@
 class HtmlPage
-  attr_accessor :url, :html
+  attr_accessor :html
 
-  def initialize(url, html)
-    self.url = url
+  def initialize(html)
     self.html = html
   end
 

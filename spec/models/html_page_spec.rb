@@ -4,7 +4,7 @@ require 'spec_helper'
 describe HtmlPage do
   let(:html_path) { "spec/html/inotomsk.ru.html" }
   let(:content) { open(html_path).read }
-  let(:html_page) { HtmlPage.new('http://openteam.ru', content) }
+  let(:html_page) { HtmlPage.new(content) }
 
   subject { html_page }
 
