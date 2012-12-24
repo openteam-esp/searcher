@@ -4,22 +4,27 @@ require 'spec_helper'
 
 describe CmsSubscriber do
   subject { CmsSubscriber.new }
-  before  { Requester.stub(:new).and_return {mock(:response_status => 200, :response_body => 'html body')} }
+
+  def add_url(url)
+    VCR.use_cassette(:default) do
+      subject.add url
+    end
+  end
 
   context '#add' do
-    before { subject.add 'http://example.com/' }
+    before { add_url 'http://tomsk.gov.ru/' }
 
     specify {
-      expect { subject.add 'http://example.com/' }.to_not change(Page, :count)
+      expect { add_url 'http://tomsk.gov.ru/' }.to_not change(Page, :count)
     }
   end
 
   context '#remove' do
-    before { subject.add 'http://example.com/' }
-    before { subject.add 'http://example.com/ru/about/' }
+    before { add_url 'http://tomsk.gov.ru/' }
+    before { add_url 'http://tomsk.gov.ru/ru/organy_vlasti/' }
 
     specify {
-      expect { subject.remove 'http://example.com/' }.to change(Page, :count).to(0)
+      expect { subject.remove 'http://tomsk.gov.ru/' }.to change(Page, :count).to(0)
     }
   end
 end

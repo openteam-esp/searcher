@@ -23,4 +23,6 @@ group :test do
   gem 'rspec-rails'
   gem 'sqlite3'
   gem 'sunspot_matchers'
+  gem 'vcr'
+  gem 'webmock', '<1.9'
 end
