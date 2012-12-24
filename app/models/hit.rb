@@ -1,26 +1,39 @@
+# encoding: utf-8
+
 class Hit
-  attr_accessor :title, :excerpt, :url, :score
+  attr_accessor :sunspot_hit
 
   def initialize(sunspot_hit)
-    self.title = self.highlight(sunspot_hit, :title, 255)
-    self.excerpt = self.highlight(sunspot_hit, :text, 512)
-    self.url = sunspot_hit.stored(:url)
-    self.score = sunspot_hit.score
+    self.sunspot_hit = sunspot_hit
   end
 
-  protected
-    def highlight(hit, field, length)
-      highlight = nil;
-      [nil, 'ru'].each do | lang |
-        highlights = hit.highlights([field, lang].join('_'))
-        if highlights.any?
-          highlight = highlights.reduce([]) do |result, highlight|
-            result << highlight.format { |word| "<em>#{word}</em>" } if result.length < length
-            result
-          end.join('... ')
-          break
-        end
-      end
-      highlight || hit.result.send(field).truncate(length, :separator => ' ')
-    end
+  def title
+    @title ||= highlight(:title_ru)
+  end
+
+  def excerpt
+    @excerpt ||= highlight( :text_ru)
+  end
+
+  def url
+    @url ||= sunspot_hit.stored(:url)
+  end
+
+  def score
+    @score ||= sunspot_hit.score
+  end
+
+  def attributes
+    %w[title excerpt url score]
+  end
+
+  def as_json(params)
+    attributes.inject({}) {|j,a| j[a] = self.send(a); j}
+  end
+
+  private
+
+  def highlight(field)
+    sunspot_hit.highlights(field).map(&:formatted).join(' … ')
+  end
 end

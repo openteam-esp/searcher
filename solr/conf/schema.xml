@@ -192,7 +192,8 @@
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_texts" stored="true" type="text" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_ru_texts" stored="true" type="ru_text" multiValued="true" indexed="true"/>
+    <dynamicField name="*_ru_texts" stored="true" type="ru_text" multiValued="true" indexed="true"
+      termVectors='true' termPositions='true' termOffsets='true'/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_en_texts" stored="true" type="en_text" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->

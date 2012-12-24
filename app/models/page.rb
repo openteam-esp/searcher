@@ -15,23 +15,23 @@ class Page < ActiveRecord::Base
   before_save :set_level
 
   searchable do
-    string  :url, :stored => true
+    string  :url,  :stored => true
 
     boolean :has_html
 
     integer :level
 
-    text :title, :stored => true,  :boost => 1.1
+    text :title,                      :boost => 1.1
     text :title_ru, :stored => true,  :boost => 1.05
 
-    text :text, :stored => true,  :boost => 1
-    text :text_ru, :stored => true,  :boost => 0.9
+    text :text,                       :boost => 1
+    text :text_ru,  :stored => true,  :boost => 0.9
 
     time :entry_date, :trie => true
   end
 
   def html_page
-    @html_page ||= HtmlPage.new(url, html) if html?
+    @html_page ||= HtmlPage.new(html) if html?
   end
 
   def update_html
@@ -41,12 +41,22 @@ class Page < ActiveRecord::Base
 
   def self.search_by(params)
     Page.search do |search|
-      if params[:q].present?
-        search.keywords params[:q], :highlight => true
+      if params[:q].to_s =~ /[[:alnum:]]/
+        search.keywords params[:q] do
+          highlight :title_ru,  :max_snippets => 2, :merge_contiguous_fragments => true
+          highlight :text_ru,   :max_snippets => 3, :merge_contiguous_fragments => true
+        end
         search.with(:has_html, true)
         search.with(:url).starting_with(params[:url]) if (params[:url])
         search.paginate(:page => (params[:page] || 1).to_i, :per_page => params[:per_page])
-        Boostificator.new(:search => search, :field => :entry_date_dt, :extra_boost => "pow(0.9,level_i)").adjust_solr_params
+        Boostificator.new(:search => search, :field => :entry_date_dt, :extra_boost => "pow(0.9,level_i)").adjust_solr_params do |solr_params|
+          solr_params[:'hl.fl'].each do |field|
+            solr_params[:"f.#{field}.hl.alternateField"] = field
+            solr_params[:"f.#{field}.hl.maxAlternateFieldLength"] =
+              (solr_params[:"f.#{field}.hl.snippets"] || 1).to_i * (solr_params[:"f.#{field}.hl.fragsize"] || 100).to_i
+          end
+          solr_params[:'hl.maxAlternateFieldLength']
+        end
       else
         # TODO: change this for appropriate solr method
         search.with(:url, 'nonexistent-url')
@@ -56,6 +66,7 @@ class Page < ActiveRecord::Base
 
 
   private
+
     def page_io
       open(noncached_url)
     rescue SocketError => e
