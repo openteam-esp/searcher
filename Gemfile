@@ -4,12 +4,13 @@ group :default do
   gem 'esp-commons'
   gem 'nokogiri'
   gem 'progress_bar',                             :require => false
-  gem 'rails'
+  gem 'rails', '3.2.12'
   gem 'sanitize'
   gem 'sunspot_rails',    '>= 2.0.0.pre.120417'
 end
 
 group :development do
+  gem 'brakeman'
   gem 'sunspot_solr',     '>= 2.0.0.pre.120417'
   gem 'rvm-capistrano'
 end
