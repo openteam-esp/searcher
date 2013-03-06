@@ -56,7 +56,7 @@ namespace :db do
     run_locally("bin/rake sunspot:solr:stop; true")
     run_locally("bin/rake db:drop")
     run_locally("bin/rake db:create")
-    run_locally("ssh #{domain} pg_dump -U #{db_username} #{database} -O | psql #{local_database}")
+    run_locally("ssh #{domain} pg_dump -h #{host} -U #{db_username} #{database} -O | psql #{local_database}")
     run_locally("bin/rake sunspot:solr:start")
     run_locally("bin/rake db:migrate")
     run_locally("bin/rake db:migrate RAILS_ENV=test")
