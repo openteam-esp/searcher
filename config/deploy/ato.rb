@@ -112,17 +112,12 @@ end
 namespace :subscriber do
   desc "Start rabbitmq subscriber"
   task :start do
-    run "/usr/local/etc/rc.d/searcher-subscriber.sh start"
+    run "#{deploy_to}/current/script/subscriber -e production start"
   end
 
   desc "Stop rabbitmq subscriber"
   task :stop do
-    run "/usr/local/etc/rc.d/searcher-subscriber.sh stop"
-  end
-
-  desc "Restart rabbitmq subscriber"
-  task :restart do
-    run "/usr/local/etc/rc.d/searcher-subscriber.sh restart"
+    run "#{deploy_to}/current/script/subscriber stop"
   end
 end
 
@@ -134,9 +129,10 @@ after "deploy:finalize_update", "deploy:config_app"
 after "deploy", "deploy:migrate"
 after "deploy", "deploy:copy_unicorn_config"
 after "deploy", "deploy:reload_servers"
-after "deploy", "subscriber:restart"
+after "deploy", "subscriber:start"
 after "deploy:restart", "deploy:cleanup"
 after "deploy", "deploy:airbrake"
 
 # deploy:rollback
 after "deploy:rollback", "deploy:reload_servers"
+after "deploy:rollback", "subscriber:start"
