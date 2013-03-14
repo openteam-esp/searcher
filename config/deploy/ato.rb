@@ -98,11 +98,6 @@ namespace :unicorn do
     run "/usr/local/etc/rc.d/unicorn stop"
   end
 
-  desc "Reload Unicorn"
-  task :reload do
-    run "/usr/local/etc/rc.d/unicorn reload"
-  end
-
   desc "Restart Unicorn"
   task :restart do
     run "/usr/local/etc/rc.d/unicorn restart"
@@ -128,11 +123,11 @@ before "deploy", "subscriber:stop"
 after "deploy:finalize_update", "deploy:config_app"
 after "deploy", "deploy:migrate"
 after "deploy", "deploy:copy_unicorn_config"
-after "deploy", "deploy:reload_servers"
+after "deploy", "unicorn:restart"
 after "deploy", "subscriber:start"
 after "deploy:restart", "deploy:cleanup"
 after "deploy", "deploy:airbrake"
 
 # deploy:rollback
-after "deploy:rollback", "deploy:reload_servers"
+after "deploy:rollback", "unicorn:restart"
 after "deploy:rollback", "subscriber:start"
