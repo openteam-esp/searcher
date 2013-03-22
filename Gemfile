@@ -6,14 +6,14 @@ group :default do
   gem 'progress_bar',                  :require => false
   gem 'rails',                         '~> 3.2.13'
   gem 'sanitize'
-  gem 'sunspot_rails',                 '>= 2.0.0.pre.120417'
+  gem 'sunspot_rails',                 '~> 2.0.0'
 end
 
 group :development do
   gem 'brakeman'
   gem 'capistrano-ext'
   gem 'rvm-capistrano'
-  gem 'sunspot_solr',                  '>= 2.0.0.pre.120417'
+  gem 'sunspot_solr',                  '~> 2.0.0'
 end
 
 group :production do
