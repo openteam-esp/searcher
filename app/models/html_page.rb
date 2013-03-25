@@ -20,14 +20,14 @@ class HtmlPage
   protected
     def text_by_css(selector)
       if (nodes = nokogiri.css(selector))
-        nodes.map(&:content).map{|content| Sanitize.clean(content)}.join(' ').to_s.gsub(/[[:space:]]+/, ' ').strip
+        nodes.map(&:content).map{|content| Nokogiri::HTML(content).text}.join(' ').to_s.gsub(/[[:space:]]+/, ' ').strip
       else
         ''
       end
     end
 
     def nokogiri
-      @nokogiri ||= Nokogiri::HTML(html.gsub(/</, ' <')).tap do | nokogiri |
+      @nokogiri ||= Nokogiri::HTML(html.gsub(/</, ' <')).tap do |nokogiri|
         nokogiri.css('.noindex').map(&:remove)
       end
     end
