@@ -3,16 +3,16 @@ source :rubygems
 group :default do
   gem 'esp-commons'
   gem 'nokogiri'
-  gem 'progress_bar',                  :require => false
-  gem 'rails',                         '~> 3.2.13'
-  gem 'sunspot_rails',                 '~> 2.0.0'
+  gem 'rails'
+  gem 'sunspot_rails'
 end
 
 group :development do
   gem 'brakeman'
-  gem 'capistrano-ext'
-  gem 'rvm-capistrano'
-  gem 'sunspot_solr',                  '~> 2.0.0'
+  gem 'capistrano-db-tasks', :git => 'git://github.com/openteam/capistrano-db-tasks'
+  gem 'capistrano-unicorn',  :git => 'git://github.com/sosedoff/capistrano-unicorn'
+  gem 'openteam-capistrano'
+  gem 'sunspot_solr'
 end
 
 group :production do

@@ -1,52 +1,35 @@
-def current_dir
-  File.expand_path('../..', __FILE__)
-end
+# ------------------------------------------------------------------------------
+# Sample rails 3 config
+# ------------------------------------------------------------------------------
 
-def group
-  current_dir.split('/')[-2]
-end
+# Set your full path to application.
+APP_DIR = File.expand_path('../../', __FILE__)
 
-def project
-  current_dir.split('/')[-1]
-end
+# Set unicorn options
+worker_processes 2
+preload_app true
+timeout 180
 
-def config_file_path
-  "#{current_dir}/config/settings.yml"
-end
+# Fill path to your app
+working_directory APP_DIR
 
-def heroku?
-  ENV['PORT']
-end
+# Set up socket location
+listen "#{APP_DIR}/tmp/sockets/unicorn.sock", :backlog => 64
 
-def settings
-  heroku? ? {} : (YAML.load_file(config_file_path)['unicorn'] || {})
-end
+# Loging
+stderr_path "#{APP_DIR}/log/unicorn.stderr.log"
+stdout_path "#{APP_DIR}/log/unicorn.stdout.log"
 
-def pid_file
-  heroku? ? "/tmp/#{group}-#{project}.pid" : "/var/run/#{group}/#{project}.pid"
-end
-
-worker_processes  (settings['workers'] || ENV['UNICORN_WORKERS'] || 2).to_i
-timeout           (settings['timeout'] || ENV['UNICORN_TIMEOUT'] || 300).to_i
-preload_app       true
-pid               pid_file
-
-if heroku?
-  listen            ENV['PORT'].to_i, :tcp_nopush => false
-else
-  listen            "/tmp/#{group}-#{project}.sock", :backlog => 64
-
-  stdout_path       "/var/log/#{group}/#{project}/stdout.log"
-  stderr_path       "/var/log/#{group}/#{project}/stderr.log"
-end
+# Set master PID location
+pid "#{APP_DIR}/tmp/pids/unicorn.pid"
 
 before_fork do |server, worker|
   defined?(ActiveRecord::Base) and ActiveRecord::Base.connection.disconnect!
-
-  old_pid = "#{pid_file}.oldbin"
+  old_pid = "#{server.config[:pid]}.oldbin"
   if File.exists?(old_pid) && server.pid != old_pid
     begin
-      Process.kill("QUIT", File.read(old_pid).to_i)
+      sig = (worker.nr + 1) >= server.worker_processes ? :QUIT : :TTOU
+      Process.kill(sig, File.read(old_pid).to_i)
     rescue Errno::ENOENT, Errno::ESRCH
       # someone else did our job for us
     end

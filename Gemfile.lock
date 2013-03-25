@@ -1,3 +1,16 @@
+GIT
+  remote: git://github.com/openteam/capistrano-db-tasks
+  revision: b6b81df2d6965c456e8ca4cf3aa325c95a542b36
+  specs:
+    capistrano-db-tasks (0.2)
+
+GIT
+  remote: git://github.com/sosedoff/capistrano-unicorn
+  revision: dc49187df68e92bc04b7b0fa42da1e24f70d69f5
+  specs:
+    capistrano-unicorn (0.1.7)
+      capistrano
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -57,7 +70,7 @@ GEM
       terminal-table (~> 1.4)
     builder (3.0.4)
     bunny (0.8.0)
-    capistrano (2.13.5)
+    capistrano (2.14.2)
       highline
       net-scp (>= 1.0.0)
       net-sftp (>= 2.0.0)
@@ -83,7 +96,6 @@ GEM
       rails
     eventmachine (0.12.10)
     fastercsv (1.5.5)
-    fattr (2.2.1)
     haml (4.0.0)
       tilt
     highline (1.6.13)
@@ -98,28 +110,28 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.21)
     multi_json (1.7.1)
-    net-scp (1.0.4)
-      net-ssh (>= 1.99.1)
-    net-sftp (2.0.5)
-      net-ssh (>= 2.0.9)
-    net-ssh (2.6.2)
-    net-ssh-gateway (1.1.0)
-      net-ssh (>= 1.99.1)
+    net-scp (1.1.0)
+      net-ssh (>= 2.6.5)
+    net-sftp (2.1.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (2.6.6)
+    net-ssh-gateway (1.2.0)
+      net-ssh (>= 2.6.5)
     nokogiri (1.5.5)
+    openteam-capistrano (0.0.5)
+      capistrano-db-tasks
+      capistrano-ext
+      capistrano-unicorn
+      rvm-capistrano
     openteam-commons (0.2.3)
       airbrake
       configliere
       rails
       unicorn
       whenever
-    options (2.3.0)
-      fattr
     pg (0.14.0)
     polyglot (0.3.3)
     pr_geohash (1.0.0)
-    progress_bar (0.4.0)
-      highline (~> 1.6.1)
-      options (~> 2.3.0)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -212,17 +224,17 @@ PLATFORMS
 
 DEPENDENCIES
   brakeman
-  capistrano-ext
+  capistrano-db-tasks!
+  capistrano-unicorn!
   esp-commons
   nokogiri
+  openteam-capistrano
   pg
-  progress_bar
-  rails (~> 3.2.13)
+  rails
   rspec-rails
-  rvm-capistrano
   sqlite3
   sunspot_matchers
-  sunspot_rails (~> 2.0.0)
-  sunspot_solr (~> 2.0.0)
+  sunspot_rails
+  sunspot_solr
   vcr
   webmock (< 1.9)
