@@ -5,7 +5,6 @@ group :default do
   gem 'nokogiri'
   gem 'progress_bar',                  :require => false
   gem 'rails',                         '~> 3.2.13'
-  gem 'sanitize'
   gem 'sunspot_rails',                 '~> 2.0.0'
 end
 
