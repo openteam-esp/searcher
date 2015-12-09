@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 group :default do
   gem 'esp-commons'
   gem 'nokogiri'
-  gem 'rails'
+  gem 'rails', '~> 3.2.13'
   gem 'sunspot_rails'
 end
 
