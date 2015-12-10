@@ -83,7 +83,7 @@ GEM
     domain_name (0.5.25)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
-    esp-commons (0.5.7)
+    esp-commons (0.5.8)
       active_attr
       amqp (~> 0.9.8)
       bunny (~> 0.8.0)
