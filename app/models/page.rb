@@ -64,7 +64,6 @@ class Page < ActiveRecord::Base
     end
   end
 
-
   private
 
     def page_io
@@ -83,5 +82,6 @@ class Page < ActiveRecord::Base
 
     def set_level
       self.level = [url.count('/'), 3].max - 3
+      self.level += 3 if entry_date.present?
     end
 end
