@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 group :default do
+  gem 'awesome_print'
   gem 'airbrake', '~> 4.3.4'
   gem 'esp-commons'
   gem 'nokogiri'

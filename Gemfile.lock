@@ -51,6 +51,7 @@ GEM
       amq-protocol (~> 1.2.0)
       eventmachine
     arel (3.0.3)
+    awesome_print (1.6.1)
     brakeman (1.9.3)
       erubis (~> 2.6)
       fastercsv (~> 1.5)
@@ -236,6 +237,7 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake (~> 4.3.4)
+  awesome_print
   brakeman
   capistrano (~> 2.15.5)
   capistrano-db-tasks!
@@ -255,4 +257,4 @@ DEPENDENCIES
   webmock (< 1.9)
 
 BUNDLED WITH
-   1.11.2
+   1.12.3

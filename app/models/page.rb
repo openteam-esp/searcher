@@ -77,7 +77,7 @@ class Page < ActiveRecord::Base
     end
 
     def noncached_url
-      @noncached_url ||= url.gsub(%r{^http://}, 'http://nocache.')
+      @noncached_url ||= url.gsub(/^(https?):\/\//){ "#{$1}://nocache." }
     end
 
     def set_level
